@@ -1,5 +1,30 @@
+import pickle
 from statistics import mean
 
+
+def serialize_pickle (pickle_file, iris):
+    with open(pickle_file,'wb') as f:
+         pickle.dump(iris,f)
+
+def deserialize_pickle (pickle_file):
+    with open(pickle_file,'rb') as f:
+        iris = pickle.load(f)
+    return iris
+
+
+def serialize_json (json_file, iris):
+    describe= ['a','b','c','d']
+    result = '[\n[\n'
+    for elements in iris:
+        result += '{'
+        for element in elements:
+            result += str(element) + ','
+        result += '}'
+    result += ']\n]\n'
+
+    return result
+    # with open(json_file,'w') as f:
+    #      json.dump(employees,f)
 
 def main():
     with open('iris.data', 'r', encoding='utf-8') as f:
@@ -18,7 +43,8 @@ def main():
     with open('iris.stats', 'w', encoding='utf-8') as f:
         for key in stats:
             f.write(str(stats[key]) + '\n')
-
+    serialize_pickle('iris.pickle', all_rows)
+    print(serialize_json('json_file', all_rows))
 
 def __convert_line(line, names):
     line.replace("\n", "")
@@ -46,5 +72,5 @@ if __name__ == '__main__':
         print(f'Something failed with {e.__class__.__name__}')
     except Exception as e:
         print(f'Something failed with {e.__class__.__name__}')
-    else:
-        print(f'')
+    # else:
+    #     print(f'')
